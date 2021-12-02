@@ -6,7 +6,7 @@ const Subscriptions = () => {
     const [subscriptions, setSubscription] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/subscriptions')
+        fetch('https://ancient-atoll-05211.herokuapp.com/subscriptions')
             .then((res) => res.json())
             .then((data) => setSubscription(data));
     }, []);

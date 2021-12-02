@@ -13,7 +13,7 @@ const AllNotes = () => {
     //Load Users data
 
     useEffect(() => {
-        fetch(`http://localhost:5000/notes/${user.email}`)
+        fetch(`https://ancient-atoll-05211.herokuapp.com/notes/${user.email}`)
             .then((res) => res.json())
             .then((data) => setNotes(data));
     }, [updateToggle, allNotes]);
@@ -24,14 +24,14 @@ const AllNotes = () => {
 
     useEffect(() => {
         fetch(
-            `http://localhost:5000/filterNotes?email=${user.email}&date=${filterDate}`
+            `https://ancient-atoll-05211.herokuapp.com/filterNotes?email=${user.email}&date=${filterDate}`
         )
             .then((res) => res.json())
             .then((data) => setNotes(data));
     }, [updateToggle, filterDate]);
 
     useEffect(() => {
-        fetch(`http://localhost:5000/notes/${user.email}`)
+        fetch(`https://ancient-atoll-05211.herokuapp.com/notes/${user.email}`)
             .then((res) => res.json())
             .then((data) => setNotes(data));
     }, [updateToggle, allNotes]);
@@ -40,7 +40,7 @@ const AllNotes = () => {
     const handleDelete = (id) => {
         console.log(id);
 
-        fetch(`http://localhost:5000/notes/${id}`, {
+        fetch(`https://ancient-atoll-05211.herokuapp.com/notes/${id}`, {
             method: 'DELETE',
             headers: {
                 'content-type': 'application/json'
@@ -69,7 +69,7 @@ const AllNotes = () => {
         setTitle('');
         setNote('');
         setDate('');
-        fetch(`http://localhost:5000/note/${id}`)
+        fetch(`https://ancient-atoll-05211.herokuapp.com/note/${id}`)
             .then((res) => res.json())
             .then((data) => {
                 setSingleNote(data);
@@ -87,13 +87,16 @@ const AllNotes = () => {
             note,
             date: date.toLocaleDateString()
         };
-        fetch(`http://localhost:5000/noteupdate/${singleNote._id}`, {
-            method: 'PUT',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(updatedNote)
-        })
+        fetch(
+            `https://ancient-atoll-05211.herokuapp.com/noteupdate/${singleNote._id}`,
+            {
+                method: 'PUT',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(updatedNote)
+            }
+        )
             .then((res) => res.json())
             .then((result) => {
                 if (result.matchedCount) {

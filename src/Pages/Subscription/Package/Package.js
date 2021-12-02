@@ -7,7 +7,7 @@ const Package = ({ sub }) => {
     const { user } = useAuth();
     const [userInfo, setuserInfo] = useState({});
     useEffect(() => {
-        fetch(`http://localhost:5000/users/${user.email}`)
+        fetch(`https://ancient-atoll-05211.herokuapp.com/users/${user.email}`)
             .then((res) => res.json())
             .then((user) => setuserInfo(user));
     }, []);
@@ -19,13 +19,16 @@ const Package = ({ sub }) => {
             );
             return;
         }
-        fetch(`http://localhost:5000/users_subscription/${user.email}`, {
-            method: 'PUT',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(sub)
-        })
+        fetch(
+            `https://ancient-atoll-05211.herokuapp.com/users_subscription/${user.email}`,
+            {
+                method: 'PUT',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(sub)
+            }
+        )
             .then((res) => res.json())
             .then((result) => {
                 if (result.matchedCount) {

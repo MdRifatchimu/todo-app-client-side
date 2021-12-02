@@ -8,7 +8,7 @@ const PurchasePackage = () => {
     const [subPackage, setSubPackage] = useState({});
     const [conform, setConform] = useState(false);
     useEffect(() => {
-        fetch(`http://localhost:5000/subscriptions/${id}`)
+        fetch(`https://ancient-atoll-05211.herokuapp.com/subscriptions/${id}`)
             .then((res) => res.json())
             .then((data) => setSubPackage(data));
     }, []);

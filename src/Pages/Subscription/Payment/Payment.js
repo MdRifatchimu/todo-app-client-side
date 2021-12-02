@@ -24,7 +24,7 @@ const Payment = ({ subPackage }) => {
                     const order = await actions.order.capture();
                     alert('Successfully paid');
                     fetch(
-                        `http://localhost:5000/users_subscription/${user.email}`,
+                        `https://ancient-atoll-05211.herokuapp.com/users_subscription/${user.email}`,
                         {
                             method: 'PUT',
                             headers: {

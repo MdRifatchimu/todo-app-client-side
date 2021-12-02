@@ -83,7 +83,7 @@ const useFirebase = () => {
     const saveUser = (email, displayName, method) => {
         const user = { email, displayName };
         console.log(user);
-        fetch('http://localhost:5000/users', {
+        fetch('https://ancient-atoll-05211.herokuapp.com/users', {
             method: method,
             headers: {
                 'content-type': 'application/json'

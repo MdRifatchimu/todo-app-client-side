@@ -12,7 +12,7 @@ const CreateNote = () => {
 
     const [userInfo, setuserInfo] = useState({});
     useEffect(() => {
-        fetch(`http://localhost:5000/users/${user.email}`)
+        fetch(`https://ancient-atoll-05211.herokuapp.com/users/${user.email}`)
             .then((res) => res.json())
             .then((user) => setuserInfo(user));
     }, []);
@@ -37,7 +37,7 @@ const CreateNote = () => {
             date: date.toLocaleDateString()
         };
 
-        fetch('http://localhost:5000/notes', {
+        fetch('https://ancient-atoll-05211.herokuapp.com/notes', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
