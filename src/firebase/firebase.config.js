@@ -6,16 +6,16 @@ const firebaseConfig = {
     // messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
     // appId: process.env.REACT_APP_FIREBASE_APP_ID
 
-    apiKey: 'AIzaSyAOS1QpcoKUOkW5I-2idEdo4f1b-g_gpNA',
+    apiKey: 'AIzaSyAuTx1PQX8sWq9tnlriBQ0eCTOg3p0ava4',
 
-    authDomain: 'todo-app-61d11.firebaseapp.com',
+    authDomain: 'todoapp-dd91c.firebaseapp.com',
 
-    projectId: 'todo-app-61d11',
+    projectId: 'todoapp-dd91c',
 
-    storageBucket: 'todo-app-61d11.appspot.com',
+    storageBucket: 'todoapp-dd91c.appspot.com',
 
-    messagingSenderId: '403677183287',
+    messagingSenderId: '380555206824',
 
-    appId: '1:403677183287:web:b8988fb64c7aa5a988eeb2'
+    appId: '1:380555206824:web:5dee05cdcf06c1b47ae29d'
 };
 export default firebaseConfig;
