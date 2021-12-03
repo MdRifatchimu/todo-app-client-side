@@ -1,121 +1,104 @@
-import {
-    getAuth,
-    onAuthStateChanged,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    updateProfile,
-    signOut
-} from 'firebase/auth';
-import { useEffect, useState } from 'react';
-import authInitalize from '../firebase/firebase.inti';
-authInitalize();
+import { useState, useEffect } from 'react';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, getIdToken } from "firebase/auth";
+import initializeFirebase from '../Firebase/firebase.init';
+
+// initialize firebase app
+initializeFirebase();
 
 const useFirebase = () => {
-    const auth = getAuth();
     const [user, setUser] = useState({});
-    const [authError, setAuthError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [authError, setAuthError] = useState('');
+    const [admin, setAdmin] = useState('');
 
-    //Email Registration
-    const userRegistration = (name, email, password, history) => {
+    const auth = getAuth();
+
+    const signupUser = (name, email, password, location, history) => {
         setIsLoading(true);
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                const destination = '/addnotes';
+                history.replace(destination);
                 setAuthError('');
-
                 const newUser = { email, displayName: name };
                 setUser(newUser);
-                //Save user to the database
-                saveUser(email, name, 'POST');
-                updateProfile(auth.currentUser, {
-                    displayName: name
-                })
-                    .then(() => {})
-                    .catch((error) => {});
-                history.push('/');
+                saveUser(email, name);
+                updateProfile(auth.currentUser, { displayName: name })
+                    .then(result => { })
             })
             .catch((error) => {
                 setAuthError(error.message);
+                console.log(error);
             })
             .finally(() => setIsLoading(false));
-    };
+    }
 
-    //Login With email
-    const loginWithEmail = (email, password, history, location) => {
-        setIsLoading(true);
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                setAuthError('');
-                const destination = location?.state?.from || '/home';
-                history.push(destination);
-            })
-            .catch((error) => {
-                setAuthError(error.message);
-            })
-            .finally(() => setIsLoading(false));
-    };
-
-    // const loginWithGoogle = () => {
-    //     setIsLoading(true);
-    //     return signInWithPopup(auth, GoogleProvider);
-    //     // .then((result) => {
-    //     //     const user = result.user;
-    //     //     setUser(user);
-    //     // })
-    //     // .catch((error) => {
-    //     //     setLogingError(error.massage);
-    //     // })
-    //     // .finally(() => setIsLoading(false));
-    // };
-    const logOut = () => {
-        setIsLoading(true);
-        signOut(auth)
-            .then(() => {
-                setUser({});
-            })
-            .catch((error) => {
-                setAuthError(error.massage);
-            })
-            .finally(() => setIsLoading(false));
-    };
-
-    //Save user to the database
-    const saveUser = (email, displayName, method) => {
-        const user = { email, displayName };
-        console.log(user);
-        fetch('https://ancient-atoll-05211.herokuapp.com/users', {
-            method: method,
+    const saveUser = (email, displayName) => {
+        const user = {email, displayName, status: 'pending'};
+        fetch('https://fathomless-beach-05738.herokuapp.com/users', {
+            method: 'POST',
             headers: {
                 'content-type': 'application/json'
             },
             body: JSON.stringify(user)
         })
-            .then((res) => res.json)
-            .then((data) => {
-                console.log(data);
-            });
-    };
+            .then()
+    }
 
+    const loginUser = (email, password, location, history) => {
+        setIsLoading(true);
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const destination = '/addnotes';
+                history.replace(destination);
+                setAuthError('');
+            })
+            .catch((error) => {
+                setAuthError(error.message);
+            })
+            .finally(() => setIsLoading(false));
+    }
+
+    // observer user state
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribed = onAuthStateChanged(auth, (user) => {
             if (user) {
+                getIdToken(user)
+                    .then(idToken => localStorage.setItem('idToken', idToken))
                 setUser(user);
             } else {
-                setUser({});
+                setUser({})
             }
             setIsLoading(false);
         });
-        return () => unsubscribe;
+        return () => unsubscribed;
     }, []);
+
+    useEffect(() => {
+        fetch(`https://fathomless-beach-05738.herokuapp.com/users/${user.email}`)
+            .then(res => res.json())
+            .then(data => setAdmin(data))
+    }, [user.email])
+
+    const logout = () => {
+        setIsLoading(true);
+        signOut(auth).then(() => {
+            // Sign-out successful.
+        }).catch((error) => {
+            // An error happened.
+        })
+            .finally(() => setIsLoading(false));
+    }
 
     return {
         user,
+        admin,
         isLoading,
-        userRegistration,
-        loginWithEmail,
-        setIsLoading,
         authError,
-        logOut
-    };
-};
+        signupUser,
+        loginUser,
+        logout,
+    }
+}
+
 export default useFirebase;

@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.admin-links {
+  background: red !important;
+}
